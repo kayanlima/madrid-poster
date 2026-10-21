@@ -14,7 +14,15 @@ button,label.f{background:var(--ac);color:var(--ac-fg);border:0;border-radius:8p
 button.o,label.f.o{background:transparent;color:var(--fg);border:1px solid var(--bd)}
 button.on{outline:2px solid var(--fg)}
 input[type=file]{display:none}input[type=range]{flex:1;min-width:120px}
-small{opacity:.7}img.t{height:48px;border-radius:4px;border:2px solid transparent;cursor:pointer}img.t.on{border-color:var(--fg)}#pr{display:none}@page{size:landscape;margin:0}@media print{body{padding:0;background:#fff}.w{display:none}#pr{display:block}#pr img{display:block;width:100vw;height:auto;page-break-after:always}}
+small{opacity:.7}img.t{height:48px;border-radius:4px;border:2px solid transparent;cursor:pointer}img.t.on{border-color:var(--fg)}#pr{display:none}
+@page{size:A4 landscape;margin:0}
+@media print{
+  html,body{width:297mm!important;height:210mm!important;margin:0!important;padding:0!important;background:#fff!important}
+  .w{display:none!important}
+  #pr{display:block!important;width:297mm!important;height:auto!important;margin:0!important;padding:0!important}
+  #pr img{display:block;width:297mm!important;height:210mm!important;max-width:none!important;object-fit:fill;page-break-after:always;break-after:page}
+  #pr img:last-child{page-break-after:auto;break-after:auto}
+}
 </style></head><body><div class="w">
 <h1>Madrid · Montador de pôster</h1>
 <p class="s">Envie fotos para o quadro em branco, arraste para enquadrar e baixe em JPG ou PDF.</p>
@@ -73,8 +81,8 @@ cv.onpointermove=e=>{if(!drag||!cs().img)return;const p=pt(e);cs().ox+=p.x-drag.
 cv.onpointerup=()=>drag=null;
 const none=()=>{const p=pages();if(mode=='b'?!B.length:!S[0].img&&!S[1].img){alert('Envie pelo menos uma foto.');return null}return p};
 $('j').onclick=()=>{const p=none();if(p)p.forEach((u,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=u;a.download='madrid-poster-'+(i+1)+'.jpg';a.click()},i*400))};
-$('p').onclick=()=>{const p=none();if(!p)return;const{jsPDF}=window.jspdf,d=new jsPDF({orientation:'landscape',unit:'px',format:[1448,1086]});
-p.forEach((u,i)=>{if(i)d.addPage([1448,1086],'landscape');d.addImage(u,'JPEG',0,0,1448,1086)});d.save('madrid-poster.pdf')};
+$('p').onclick=()=>{const p=none();if(!p)return;const{jsPDF}=window.jspdf,d=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+p.forEach((u,i)=>{if(i)d.addPage('a4','landscape');d.addImage(u,'JPEG',0,0,297,210)});d.save('madrid-poster-A4.pdf')};
 $('pt').onclick=()=>{const p=none();if(!p)return;const box=$('pr');box.innerHTML='';let n=0;
 p.forEach(u=>{const im=new Image();im.onload=()=>{if(++n==p.length)setTimeout(doPrint,100)};im.src=u;box.append(im)})};
 function doPrint(){let ok=false;window.addEventListener('beforeprint',()=>ok=true,{once:true});try{window.print()}catch(e){}
